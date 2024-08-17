@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Roulette</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #282c34;
+            color: white;
+        }
+        #roulette-wheel {
+            margin: 50px auto;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 10px solid #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ethereum Roulette</h1>
+    <div id="roulette-wheel">
+        <p>Place Your Bet!</p>
+    </div>
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <button onclick="spinRoulette()">Spin the Wheel</button>
+
+    <p id="status"></p>
+
+    <script>
+        let userAccount;
+        const houseWallet = "0x57CBA93A8f0abC01695917BD1c3cF569217Ab203";
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    userAccount = accounts[0];
+                    document.getElementById('status').innerText = `Connected: ${userAccount}`;
+                } catch (error) {
+                    console.error("User denied account access");
+                }
+            } else {
+                alert('MetaMask is not installed!');
+            }
+        }
+
+        async function spinRoulette() {
+            if (!userAccount) {
+                alert("Please connect your wallet first.");
+                return;
+            }
+
+            const betAmount = 0.01; // Example bet amount in ETH
+            const outcome = Math.floor(Math.random() * 37); // 0-36 for roulette
+
+            if (outcome === 0) { // Let's assume 0 is the house winning number
+                document.getElementById('status').innerText = "You lost!";
+                await sendEther(houseWallet, betAmount);
+            } else {
+                document.getElementById('status').innerText = `You won! The number was ${outcome}`;
+                // Implement winning logic here if needed
+            }
+        }
+
+        async function sendEther(toAddress, amount) {
+            try {
+                const transactionParameters = {
+                    to: toAddress,
+                    from: userAccount,
+                    value: '0x' + (amount * 1e18).toString(16),
+                };
+
+                await ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [transactionParameters],
+                });
+
+                document.getElementById('status').innerText += " - Loss sent to house.";
+            } catch (error) {
+                console.error(error);
+                document.getElementById('status').innerText += " - Transaction failed!";
+            }
+        }
+    </script>
+</body>
+</html>
