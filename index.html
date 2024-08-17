@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guttedpossum Staking Solutions</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guttedpossum Staking Solutions</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <img src="images/ethereum-background.jpg" alt="Ethereum Background">
     <h1>Guttedpossum Staking Solutions (GPSS)</h1>
-    <p>GPSS provides a method for staking Ethereum with a 3.1% APY. Ethereum staked with us will be paid back in Ethereum at the end of the staking term as specified in the agreement.</p>
-
     <h2>Earn While Offline</h2>
-    <p>If GPSS is offline for networking or system upgrades, your staking will be affected. Any losses will be compensated with rewards based on the duration of network failure, paid in $RBR coin (RubioBerry).</p>
-
-    <p><strong>Disclaimer:</strong> Staking Ethereum with Guttedpossum Staking Solutions involves risks related to market volatility and crypto exchange price variance. Please consider these risks before staking.</p>
-
-    <button onclick="window.location.href='staking.html'">Staking</button>
-    <button onclick="window.location.href='contact.html'">Contact Us</button>
-
-    <h3>Latest Ethereum Block</h3>
-    <p id="latest-block"></p>
-
-    <script>
-        // Fetch the latest Ethereum block data
-        fetch('https://beaconcha.in/api/v1/blocks/head')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('latest-block').innerHTML = `
-                    Block: ${data.data.slot} <br>
-                    Proposer: ${data.data.proposer} <br>
-                    Root: ${data.data.root}
-                `;
-            });
-    </script>
+  </header>
+  <main>
+    <p>GPSS is a secure and reliable method for staking Ethereum. Earn a competitive 3.1% APY on your staked Ethereum, paid in Ethereum at the end of the staking term as specified in the agreement. Even if the GPSS goes offline for network maintenance or system upgrades, your staking will be minimally affected. In such cases, rewards will be based on the duration of the network failure and will be paid in $RBR coin (Rubioberry).</p>
+    <div class="button-container">
+      <a href="staking.html">Staking</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div id="ethereum-block-info">
+      <h3>Latest Ethereum Block</h3>
+      <p>Loading block information...</p>
+    </div>
+  </main>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $.getJSON("https://beaconcha.in/api/v1/blocks/latest", function(data) {
+        $("#ethereum-block-info p").text("Slot: " + data.data.slot + ", Root: " + data.data.root);
+      });
+    });
+  </script>
 </body>
 </html>

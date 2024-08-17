@@ -1,0 +1,16 @@
+<?php
+// Replace with your email settings
+$to = "guttedpossum@gmail.com";
+$subject = "Contact Form Submission";
+
+$email = $_POST['email'];
+$message = $_POST['message'];
+
+$body = "Email: $email\n\nMessage:\n$message";
+
+if (mail($to, $subject, $body)) {
+  echo "Email sent successfully!";
+} else {
+  echo "Error sending email.";
+}
+?>
